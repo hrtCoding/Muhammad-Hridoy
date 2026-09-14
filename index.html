@@ -362,7 +362,7 @@
                                 <div x-intersect.once="animateProgress('frontend')">
                                     <div class="flex vlaoethsnkma mb-1">
                                         <span class="text-gray-300">Frontend</span>
-                                        <span class="text-gray-400 text-sm" x-text="`${frontend}%`">90%</span>
+                                        <span class="text-gray-400 text-sm" x-text="`${frontend}%`">100%</span>
                                     </div>
                                     <div class="h-2 bg-gray-700 boalstehwqbj">
                                         <div
@@ -376,7 +376,7 @@
                                 <div x-intersect.once="animateProgress('backend')">
                                     <div class="flex vlaoethsnkma mb-1">
                                         <span class="text-gray-300">Backend</span>
-                                        <span class="text-gray-400 text-sm" x-text="`${backend}%`">10%</span>
+                                        <span class="text-gray-400 text-sm" x-text="`${backend}%`">90%</span>
                                     </div>
                                     <div class="h-2 bg-gray-700 boalstehwqbj">
                                         <div
@@ -390,7 +390,7 @@
                                 <div x-intersect.once="animateProgress('devops')">
                                     <div class="flex vlaoethsnkma mb-1">
                                         <span class="text-gray-300">DevOps</span>
-                                        <span class="text-gray-400 text-sm" x-text="`${devops}%`">10%</span>
+                                        <span class="text-gray-400 text-sm" x-text="`${devops}%`">90%</span>
                                     </div>
                                     <div class="h-2 bg-gray-700 boalstehwqbj">
                                         <div
@@ -404,7 +404,7 @@
                                 <div x-intersect.once="animateProgress('mobile')">
                                     <div class="flex vlaoethsnkma mb-1">
                                         <span class="text-gray-300">Mobile</span>
-                                        <span class="text-gray-400 text-sm" x-text="`${mobile}%`">15%</span>
+                                        <span class="text-gray-400 text-sm" x-text="`${mobile}%`">70%</span>
                                     </div>
                                     <div class="h-2 bg-gray-700 boalstehwqbj">
                                         <div
@@ -831,10 +831,10 @@ document.addEventListener('alpine:init', () => {
         mobile: 0,
         animateProgress(bar) {
             const targetValues = {
-                frontend: 90,
-                backend: 10,
-                devops: 10,
-                mobile:15
+                frontend: 100,
+                backend: 90,
+                devops: 90,
+                mobile:75
             };
             const target = targetValues[bar];
             let start = 0;
