@@ -2579,3 +2579,200 @@
     }
   }
 }
+
+/* WhatsApp Button */
+
+.whatsapp-btn{
+
+    width:65px;
+    height:65px;
+
+    background:#25D366;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+    0 0 20px rgba(37,211,102,.7);
+
+    position:relative;
+
+    animation: floatBtn 3s ease-in-out infinite;
+
+    transition:.3s ease;
+
+}
+
+
+/* Hover Effect */
+
+.whatsapp-btn:hover{
+
+    transform:scale(1.1);
+
+    box-shadow:
+    0 0 35px rgba(37,211,102,1);
+
+}
+
+
+/* WhatsApp Icon */
+
+.whatsapp-btn svg{
+
+    width:35px;
+    height:35px;
+
+    fill:white;
+
+    animation: shakeIcon 2s infinite;
+
+}
+
+
+
+/* Notification Bubble */
+
+.whatsapp-btn span{
+
+    position:absolute;
+
+    right:-3px;
+    top:-3px;
+
+    background:red;
+
+    color:white;
+
+    width:22px;
+    height:22px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:12px;
+
+    animation: badgePulse 1.5s infinite;
+
+}
+
+
+
+/* Floating Animation */
+
+@keyframes floatBtn{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+}
+
+
+
+/* Green Glow Pulse */
+
+.whatsapp-btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    background:#25D366;
+
+    border-radius:50%;
+
+    z-index:-1;
+
+    animation:ringPulse 2s infinite;
+
+}
+
+
+
+/* Outer Ring */
+
+@keyframes ringPulse{
+
+    0%{
+
+        transform:scale(1);
+
+        opacity:.7;
+
+    }
+
+    100%{
+
+        transform:scale(1.7);
+
+        opacity:0;
+
+    }
+
+}
+
+
+
+/* Icon Shake */
+
+@keyframes shakeIcon{
+
+    0%,90%,100%{
+
+        transform:rotate(0);
+
+    }
+
+    93%{
+
+        transform:rotate(-15deg);
+
+    }
+
+    96%{
+
+        transform:rotate(15deg);
+
+    }
+
+}
+
+
+
+/* Red Notification Animation */
+
+@keyframes badgePulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.2);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
