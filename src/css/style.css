@@ -2631,7 +2631,14 @@
     animation: shakeIcon 2s infinite;
 
 }
+.w-24.h-24.boalstehwqbj {
+    border-radius: 8px !important;
+    overflow: hidden;
+}
 
+.w-24.h-24.boalstehwqbj img {
+    border-radius: 8px !important;
+}
 
 
 /* Notification Bubble */
