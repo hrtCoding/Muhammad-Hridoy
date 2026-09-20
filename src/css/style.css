@@ -2631,12 +2631,12 @@
     animation: shakeIcon 2s infinite;
 
 }
-.w-25.h-25.boalstehwqbj {
+.w-\[105px\].h-\[105px\].boalstehwqbj {
     border-radius: 8px !important;
     overflow: hidden;
 }
 
-.w-25.h-25.boalstehwqbj img {
+.w-\[105px\].h-\[105px\].boalstehwqbj img {
     border-radius: 8px !important;
 }
 
