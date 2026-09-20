@@ -16,6 +16,35 @@
 <link rel="stylesheet" href="cms/public.css?v=category-bar-6">
 <link rel="stylesheet" href="cms/navigation.css?v=nav-7"><script src="cms/navigation.js?v=nav-7" defer></script></head>
 <body class="bg-gray-950 text-gray-100 font-sans">
+    <!-- WhatsApp Popup -->
+<div class="whatsapp-widget">
+
+    <div class="whatsapp-popup" id="whatsappPopup">
+        <button class="close-chat" onclick="closeWhatsapp()">×</button>
+
+        <img src="your-image.jpg" alt="Profile">
+
+        <div class="chat-content">
+            <h4>Mobin</h4>
+            <p>Hi! How can I help you?</p>
+            <span>Typically replies within an hour</span>
+        </div>
+    </div>
+
+
+    <a href="https://wa.me/8801XXXXXXXXX" 
+       target="_blank" 
+       class="whatsapp-btn">
+
+        <svg viewBox="0 0 32 32">
+            <path d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.8 6.5L3 29l6.7-1.8c1.9 1 4 1.5 6.3 1.5 7.2 0 13-5.8 13-13S23.2 3 16 3z"/>
+        </svg>
+
+        <span>1</span>
+
+    </a>
+
+</div>
 
     <header class="sticky top-0 z-50 bg-gray-950/95 backdrop-blur-sm border-b border-gray-800" x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = window.scrollY > 50">
         <nav class="hc-nav" aria-label="Main navigation"><a href="index.html" class="flex layhetgsjdcb gap-3">
@@ -1130,7 +1159,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeActiveLink();
     window.addEventListener('hashchange', initializeActiveLink);
 });
+    <script>
+
+function closeWhatsapp(){
+
+    document.getElementById("whatsappPopup").style.display="none";
+
+}
+
+
+// Auto hide after 8 seconds (optional)
+
+setTimeout(()=>{
+
+document.getElementById("whatsappPopup").style.display="none";
+
+},8000);
+
+
 </script>
+</script>
+    
 <script type="module" src="cms/public.js?v=category-bar-6"></script>
     <script src="preloader.js"></script>
 </body>
