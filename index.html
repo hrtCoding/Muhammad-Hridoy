@@ -728,6 +728,81 @@ Choose a plan that suits your needs. From personal portfolios to enterprise solu
                         <li><a href="contact.html" class="text-gray-300 hover:text-green-400 transition-colors flex layhetgsjdcb gap-2"><i class="fas fa-envelope text-sm"></i> Contact</a></li>
                     </ul>
                 </div>
+                <!-- AI Chat Button -->
+<div class="ai-chat-wrapper">
+
+    <button id="aiChatBtn" class="ai-chat-btn">
+        🤖
+    </button>
+
+    <div id="aiChatBox" class="ai-chat-box">
+
+        <div class="ai-header">
+            <div>
+                <h4>Hridoy AI Assistant</h4>
+                <span>Online • Ready to help</span>
+            </div>
+            <button id="closeChat">×</button>
+        </div>
+
+
+        <div id="chatMessages" class="chat-messages">
+
+            <div class="ai-message">
+                👋 Hi! I'm Hridoy's AI Assistant.  
+                I can help you with services, projects, pricing and contact.
+            </div>
+
+
+            <div class="quick-box">
+
+                <button onclick="sendMessage('What services do you provide?')">
+                    👨‍💻 Services
+                </button>
+
+                <button onclick="sendMessage('Show me your projects')">
+                    🚀 Projects
+                </button>
+
+                <button onclick="sendMessage('What are your pricing plans?')">
+                    💰 Pricing
+                </button>
+
+                <button onclick="sendMessage('Can I download your CV?')">
+                    📄 CV
+                </button>
+
+                <button onclick="sendMessage('How can I contact you?')">
+                    📞 Contact
+                </button>
+
+                <button onclick="sendMessage('I want to hire you')">
+                    💼 Hire Me
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+            <input 
+            id="userInput"
+            type="text"
+            placeholder="Type your message..."
+            >
+
+            <button onclick="sendUserMessage()">
+                ➤
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
                 <div>
                     <h3 class="text-xl font-bold font-code text-white mb-6 flex layhetgsjdcb gap-2">
                         <i class="fas fa-envelope text-green-400"></i> Get in touch
@@ -1387,7 +1462,224 @@ popup.style.display="none";
 
 },8000);
 
+const chatBtn=document.getElementById("aiChatBtn");
+const chatBox=document.getElementById("aiChatBox");
+const closeChat=document.getElementById("closeChat");
 
+
+chatBtn.onclick=()=>{
+
+chatBox.style.display="block";
+
+}
+
+
+closeChat.onclick=()=>{
+
+chatBox.style.display="none";
+
+}
+
+
+
+const answers={
+
+
+"What services do you provide?":
+
+"👨‍💻 I provide full-stack web development, business websites, e-commerce solutions, custom applications and AI integrations.",
+
+
+"Show me your projects":
+
+"🚀 You can explore my latest projects and development work.",
+
+
+"What are your pricing plans?":
+
+"💰 Pricing depends on project requirements. I provide custom packages based on your needs.",
+
+
+"Can I download your CV?":
+
+"📄 Sure! You can download my latest CV below.",
+
+
+"How can I contact you?":
+
+"📞 You can contact me directly through WhatsApp.",
+
+
+"I want to hire you":
+
+"💼 Great! Let's discuss your project requirements."
+
+};
+
+
+
+function sendMessage(msg){
+
+
+addMessage(msg,"user");
+
+
+let typing=document.createElement("div");
+
+typing.className="typing";
+
+typing.innerHTML="AI is typing...";
+
+chatMessages.appendChild(typing);
+
+
+
+setTimeout(()=>{
+
+
+typing.remove();
+
+
+let reply=answers[msg] || 
+"I can help you with services, projects, pricing and contact.";
+
+
+addMessage(reply,"ai");
+
+
+
+if(msg==="Can I download your CV?"){
+
+addAction("⬇ Download CV","cv");
+
+}
+
+
+if(msg==="What are your pricing plans?"){
+
+addAction("💰 View Pricing","pricing");
+
+}
+
+
+
+if(msg==="How can I contact you?"){
+
+addAction("💬 WhatsApp Me","whatsapp");
+
+}
+
+
+
+if(msg==="Show me your projects"){
+
+addAction("🚀 View Projects","projects");
+
+}
+
+
+
+},1000);
+
+
+
+}
+
+
+
+
+function addMessage(text,type){
+
+
+let div=document.createElement("div");
+
+div.className=type==="user"?
+"user-message":
+"ai-message";
+
+
+div.innerHTML=text;
+
+
+chatMessages.appendChild(div);
+
+
+chatMessages.scrollTop=chatMessages.scrollHeight;
+
+
+}
+
+
+
+function addAction(text,type){
+
+
+let btn=document.createElement("button");
+
+btn.className="quick-box";
+
+btn.innerHTML=text;
+
+
+btn.onclick=()=>{
+
+
+if(type==="cv"){
+
+window.open("assets/cv.pdf");
+
+}
+
+
+if(type==="pricing"){
+
+location.href="pricing.html";
+
+}
+
+
+if(type==="projects"){
+
+location.href="projects.html";
+
+}
+
+
+if(type==="whatsapp"){
+
+window.open(
+"https://wa.me/8801789765804",
+"_blank"
+);
+
+}
+
+
+}
+
+
+chatMessages.appendChild(btn);
+
+
+}
+
+
+
+
+function sendUserMessage(){
+
+let input=document.getElementById("userInput");
+
+
+if(input.value.trim()!==""){
+
+sendMessage(input.value);
+
+input.value="";
+
+}
+
+}
 
 </script>
 
