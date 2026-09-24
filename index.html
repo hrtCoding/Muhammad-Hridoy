@@ -1405,7 +1405,8 @@ popup.style.display="none";
 <!-- AI assistant (left side) -->
 <div class="hx" id="hxAi">
   <div class="hx-bubble" id="hxAiBubble" role="status" aria-live="polite">
-    <div class="hx-bubble-icon" aria-hidden="true">✨</div>
+    <div class="hx-bubble-icon" aria-hidden="true"><svg class="" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5V4"/><circle cx="12" cy="2.9" r="1.1" fill="currentColor" stroke="none"/><rect x="4.5" y="6.5" width="15" height="12.5" rx="4"/><path d="M2.2 11.5v3.2M21.8 11.5v3.2"/><circle class="hx-eye" cx="9" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle class="hx-eye" cx="15" cy="12" r="1.5" fill="currentColor" stroke="none"/><path d="M9.4 15.6h5.2"/>
+    </svg></div>
     <div class="hx-bubble-text">
       <strong>Hridoy AI Assistant</strong>
       <span>Ask me about services, pricing &amp; projects</span>
@@ -1415,7 +1416,7 @@ popup.style.display="none";
 
   <section class="hx-window" id="hxWindow" role="dialog" aria-label="Hridoy AI Assistant" aria-hidden="true">
     <header class="hx-head">
-      <img src="src/img/smale2.jpg" alt="" class="hx-head-avatar" width="42" height="42">
+      <img src="src/img/male2.jpg" alt="Hridoy" class="hx-head-avatar" width="42" height="42">
       <div class="hx-head-info">
         <b>Hridoy AI Assistant</b>
         <small><i class="hx-live"></i>Online · Replies instantly</small>
@@ -1439,9 +1440,13 @@ popup.style.display="none";
   </section>
 
   <button type="button" class="hx-ai-btn" id="hxAiBtn" aria-label="Open AI assistant" aria-expanded="false">
-    <svg class="hx-ic-chat" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"/>
-      <path d="M12 8.2l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="currentColor" stroke="none"/>
+    <svg class="hx-ic-chat" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 6.5V4"/><circle cx="12" cy="2.9" r="1.1" fill="currentColor" stroke="none"/>
+      <rect x="4.5" y="6.5" width="15" height="12.5" rx="4"/>
+      <path d="M2.2 11.5v3.2M21.8 11.5v3.2"/>
+      <circle class="hx-eye" cx="9" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <circle class="hx-eye" cx="15" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <path d="M9.4 15.6h5.2"/>
     </svg>
     <svg class="hx-ic-x" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     <i class="hx-dot"></i>
@@ -1461,7 +1466,7 @@ popup.style.display="none";
 .hx-bubble::after{content:"";position:absolute;top:50%;width:11px;height:11px;background:#111827;border:1px solid #1f2937;transform:translateY(-50%) rotate(45deg)}
 #hxAiBubble{left:98px;transform:translateX(-16px)}
 #hxAiBubble::after{left:-6px;border-right:0;border-top:0}
-.hx-bubble-icon{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);font-size:18px}
+.hx-bubble-icon{width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);color:#22c55e}
 .hx-bubble-text{display:flex;flex-direction:column;gap:2px;line-height:1.3}
 .hx-bubble-text strong{font-size:14px;font-weight:600}
 .hx-bubble-text span{font-size:13px;color:#d1d5db}
@@ -1472,6 +1477,7 @@ popup.style.display="none";
 /* ---------- AI floating button ---------- */
 .hx-ai-btn{position:fixed;left:24px;bottom:30px;width:60px;height:60px;padding:0;border-radius:50%;border:1.5px solid rgba(34,197,94,.6);background:radial-gradient(circle at 30% 25%,#1b2a20,#060806);color:#22c55e;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.6);z-index:99999;animation:hxFloat 3s ease-in-out infinite,hxPulse 2.6s infinite;transition:background .25s,color .25s}
 .hx-ai-btn:hover{background:#22c55e;color:#04140a}
+.hx-eye{transform-box:fill-box;transform-origin:center;animation:hxBlink 4s infinite}
 .hx-ai-btn .hx-ic-x{display:none}
 .hx-ai-btn.hx-active .hx-ic-x{display:block}
 .hx-ai-btn.hx-active .hx-ic-chat{display:none}
@@ -1482,7 +1488,7 @@ popup.style.display="none";
 .hx-window{position:fixed;left:24px;bottom:104px;width:390px;max-width:calc(100vw - 32px);height:min(640px,calc(100vh - 130px));display:flex;flex-direction:column;background:#0a0a0a;color:#e5e7eb;border:1px solid #262626;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.75);z-index:99999;opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);transform-origin:bottom left;transition:opacity .25s ease,transform .25s ease,visibility .25s}
 .hx-window.hx-open{opacity:1;visibility:visible;transform:none}
 .hx-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(180deg,#0f1a13,#0a0a0a);border-bottom:1px solid #1f2a22;flex:none}
-.hx-head-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #22c55e}
+.hx-head-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:50% 22%;border:2px solid #22c55e}
 .hx-head-info{flex:1;min-width:0}
 .hx-head-info b{display:block;font-size:15px;font-weight:600;color:#fff}
 .hx-head-info small{display:flex;align-items:center;gap:6px;margin-top:3px;font-size:12px;color:#9ca3af}
@@ -1493,7 +1499,7 @@ popup.style.display="none";
 .hx-messages{position:relative;flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:#333 transparent}
 .hx-row{display:flex;gap:8px;align-items:flex-end;animation:hxIn .3s ease both}
 .hx-row.hx-me{justify-content:flex-end}
-.hx-av{width:28px;height:28px;border-radius:50%;object-fit:cover;flex:none}
+.hx-av{width:28px;height:28px;border-radius:50%;object-fit:cover;object-position:50% 22%;flex:none}
 .hx-msg{max-width:calc(100% - 38px);padding:11px 14px;font-size:14px;line-height:1.5;border-radius:16px}
 .hx-bot .hx-msg{background:#151515;border:1px solid #262626;border-bottom-left-radius:5px;color:#e5e7eb}
 .hx-me .hx-msg{background:#22c55e;color:#04140a;font-weight:500;border-bottom-right-radius:5px;max-width:82%}
@@ -1574,6 +1580,7 @@ popup.style.display="none";
 .hx-input button:hover{background:#16a34a}
 .hx-foot{padding:0 14px 10px;background:#000;text-align:center;font-size:11px;color:#6b7280;flex:none}
 
+@keyframes hxBlink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes hxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes hxPulse{0%{box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 0 rgba(34,197,94,.45)}70%,100%{box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 16px rgba(34,197,94,0)}}
 @keyframes hxLive{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%,100%{box-shadow:0 0 0 7px rgba(34,197,94,0)}}
@@ -1591,7 +1598,7 @@ popup.style.display="none";
   .hx-window{left:10px;right:10px;width:auto;max-width:none;bottom:88px;height:calc(100vh - 110px);height:calc(100dvh - 110px);max-height:640px;border-radius:20px}
 }
 @media (prefers-reduced-motion:reduce){
-  .hx-ai-btn,.hx-live{animation:none}
+  .hx-ai-btn,.hx-live,.hx-eye{animation:none}
 }
 </style>
 
@@ -1610,7 +1617,7 @@ popup.style.display="none";
     cvDownloadName: 'Muhammad-Hridoy-CV.pdf',
     facebook: 'https://www.facebook.com/profile.php?id=100083814708209',
     instagram: 'https://www.instagram.com/hridoy_candy/',
-    avatar: 'src/img/smale2.jpg',
+    avatar: 'src/img/male2.jpg',   // your own photo (same one used in the About page)
     cmsVersion: 'category-bar-6'
   };
 
@@ -1621,7 +1628,7 @@ popup.style.display="none";
     { name: 'Enterprise', price: 'Custom', per: '', features: ['Custom development', 'API integrations', 'Dedicated support', 'Scalable infrastructure'] }
   ];
 
-  // Shown only if your Supabase services can't be loaded.
+  // Shown when no services are found in your Supabase (admin panel) yet.
   var FALLBACK_SERVICES = [
     { title: 'Full-Stack Development', description: 'End-to-end web applications, from database to interface.', tags: ['Frontend', 'Backend'] },
     { title: 'Business & Portfolio Websites', description: 'Fast, responsive, SEO-friendly websites that look professional.', tags: ['HTML', 'CSS', 'JavaScript'] },
