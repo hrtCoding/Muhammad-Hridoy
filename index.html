@@ -1449,6 +1449,394 @@ const closeChat=document.getElementById("closeChat");
 
 
 
+<!-- ============================ JS ============================== -->
+<script>
+(function () {
+  'use strict';
+
+  /* ===== 1. YOUR SETTINGS (edit here only) ===== */
+  var CFG = {
+    whatsapp: '8801789765804',
+    email: 'heartcoding294@gmail.com',
+    phone: '+8801789765804',
+    cv: 'src/files/Muhammud-Hridoy-CV.pdf',
+    cvDownloadName: 'Muhammad-Hridoy-CV.pdf',
+    facebook: 'https://www.facebook.com/profile.php?id=100083814708209',
+    instagram: 'https://www.instagram.com/hridoy_candy/',
+    avatar: 'src/img/smale2.jpg',
+    cmsVersion: 'category-bar-6'
+  };
+
+  // Pricing (same as pricing.html). Edit here if your prices change.
+  var PLANS = [
+    { name: 'Basic', price: '$80', per: '/project', features: ['10 pages website', 'Responsive design', 'Basic SEO', '1 month support'] },
+    { name: 'Pro', price: '$100', per: '/project', popular: true, features: ['Multi-page website', 'Advanced SEO', 'CMS integration', '3 months support'] },
+    { name: 'Enterprise', price: 'Custom', per: '', features: ['Custom development', 'API integrations', 'Dedicated support', 'Scalable infrastructure'] }
+  ];
+
+  // Shown only if your Supabase services can't be loaded.
+  var FALLBACK_SERVICES = [
+    { title: 'Full-Stack Development', description: 'End-to-end web applications, from database to interface.', tags: ['Frontend', 'Backend'] },
+    { title: 'Business & Portfolio Websites', description: 'Fast, responsive, SEO-friendly websites that look professional.', tags: ['HTML', 'CSS', 'JavaScript'] },
+    { title: 'UI/UX Design', description: 'Clean, modern interfaces designed around your customers.', tags: ['UI', 'UX'] },
+    { title: 'CMS & Admin Dashboards', description: 'Manage your own content and data without touching code.', tags: ['CMS', 'Dashboard'] },
+    { title: 'AI Assistants & Automation', description: 'Chatbots and automation that save time and capture leads.', tags: ['AI', 'Automation'] }
+  ];
+
+  /* ===== 2. Helpers ===== */
+  var $ = function (id) { return document.getElementById(id); };
+  function h(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function isHttp(u) { return /^https?:\/\//i.test(u || ''); }
+  var waLink = function (msg) { return 'https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(msg); };
+
+  var win = $('hxWindow'), btn = $('hxAiBtn'), box = $('hxMessages'),
+      quick = $('hxQuick'), input = $('hxInput'), form = $('hxForm');
+  var opened = false, started = false, queue = Promise.resolve();
+
+  /* ===== 3. Load services / projects from Supabase (with fallback) ===== */
+  var dataPromise = null;
+  function withTimeout(p, ms) {
+    return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, ms); })]);
+  }
+  function getData() {
+    if (!dataPromise) {
+      dataPromise = withTimeout(
+        import('./cms/api.js?v=' + CFG.cmsVersion).then(function (api) {
+          return api.listEntries().then(function (rows) { return { rows: rows || [], api: api }; });
+        }), 7000
+      ).catch(function () {
+        // fallback: the 3 seed projects that ship with the site
+        return import('./cms/seed.js?v=' + CFG.cmsVersion)
+          .then(function (m) { return { rows: m.seed || [], api: null }; })
+          .catch(function () { return { rows: [], api: null }; });
+      });
+    }
+    return dataPromise;
+  }
+
+  /* ===== 4. UI building blocks ===== */
+  function scrollChat(el) {
+    setTimeout(function () {
+      var top = el ? el.offsetTop - 10 : box.scrollHeight;
+      box.scrollTo({ top: top, behavior: 'smooth' });
+    }, 30);
+  }
+  function botRow(contentNode, wide) {
+    var row = h('div', 'hx-row hx-bot');
+    var av = h('img', 'hx-av'); av.src = CFG.avatar; av.alt = ''; av.width = 28; av.height = 28;
+    var msg = h('div', 'hx-msg' + (wide ? ' hx-wide' : ''));
+    msg.appendChild(contentNode);
+    row.appendChild(av); row.appendChild(msg);
+    return row;
+  }
+  function userRow(text) {
+    var row = h('div', 'hx-row hx-me');
+    row.appendChild(h('div', 'hx-msg', text));
+    return row;
+  }
+  function typingRow() {
+    var t = h('div', 'hx-typing'); t.appendChild(h('i')); t.appendChild(h('i')); t.appendChild(h('i'));
+    return botRow(t);
+  }
+  function para(text) { return h('p', '', text); }
+  function btnLink(o) {
+    var a = h('a', 'hx-btn' + (o.kind ? ' hx-' + o.kind : ''), o.label);
+    a.href = o.href;
+    if (isHttp(o.href) || o.newTab) { a.target = '_blank'; a.rel = 'noopener'; }
+    if (o.download) a.setAttribute('download', o.download);
+    return a;
+  }
+  function actions(list) {
+    var d = h('div', 'hx-actions');
+    list.forEach(function (o) { d.appendChild(btnLink(o)); });
+    return d;
+  }
+  function tagsEl(tags) {
+    var d = h('div', 'hx-tags');
+    (tags || []).slice(0, 3).forEach(function (t) { d.appendChild(h('span', '', t)); });
+    return d;
+  }
+
+  /* ===== 5. The answers ===== */
+  var TOPICS = [
+    { key: 'services', label: '🧑‍💻 Services', ask: 'What services do you provide?' },
+    { key: 'projects', label: '🚀 Projects', ask: 'Show me your projects' },
+    { key: 'pricing',  label: '💰 Pricing',  ask: 'What is your pricing?' },
+    { key: 'cv',       label: '📄 CV',       ask: 'I want to see your CV' },
+    { key: 'contact',  label: '📞 Contact',  ask: 'How can I contact you?' },
+    { key: 'hire',     label: '💼 Hire Me',  ask: 'I want to hire you' }
+  ];
+
+  var ANSWERS = {
+    services: function () {
+      return getData().then(function (d) {
+        var items = d.rows.filter(function (e) { return e.kind === 'service' && e.status === 'published'; });
+        if (!items.length) items = FALLBACK_SERVICES;
+        var wrap = h('div');
+        wrap.appendChild(para('Here’s what I can build for you:'));
+        var list = h('div', 'hx-list');
+        items.forEach(function (s) {
+          var it = h('div', 'hx-item');
+          it.appendChild(h('div', 'hx-ico', '</>'));
+          var body = h('div', 'hx-item-body');
+          body.appendChild(h('h4', '', s.title));
+          if (s.description) body.appendChild(h('p', '', s.description));
+          if (s.tags && s.tags.length) body.appendChild(tagsEl(s.tags));
+          it.appendChild(body); list.appendChild(it);
+        });
+        var scroller = h('div', 'hx-scroll'); scroller.appendChild(list);
+        wrap.appendChild(scroller);
+        wrap.appendChild(actions([
+          { label: 'Discuss my project', href: 'contact.html', kind: 'primary' },
+          { label: 'All services', href: 'services.html' }
+        ]));
+        return { node: wrap, wide: true };
+      });
+    },
+
+    projects: function () {
+      return getData().then(function (d) {
+        var all = d.rows.filter(function (e) { return e.kind === 'project' && e.status === 'published'; });
+        var wrap = h('div');
+        wrap.appendChild(para(all.length ? 'Here are some of my latest projects:' : 'You can see all my work on the projects page:'));
+        if (all.length) {
+          var list = h('div', 'hx-list');
+          all.slice(0, 5).forEach(function (p) {
+            var it = h('div', 'hx-item');
+            var src = d.api && d.api.imageUrl ? d.api.imageUrl(p.image_url) : p.image_url;
+            if (src) { var im = h('img'); im.src = src; im.alt = p.title; im.loading = 'lazy'; it.appendChild(im); }
+            var body = h('div', 'hx-item-body');
+            body.appendChild(h('h4', '', p.title));
+            if (p.category) body.appendChild(h('p', '', p.category));
+            if (p.tags && p.tags.length) body.appendChild(tagsEl(p.tags));
+            var demo = d.api && d.api.safeLink ? d.api.safeLink(p.demo_url) : (isHttp(p.demo_url) ? p.demo_url : '');
+            if (demo) { var l = h('a', 'hx-link', 'Live demo ↗'); l.href = demo; l.target = '_blank'; l.rel = 'noopener'; body.appendChild(l); }
+            it.appendChild(body); list.appendChild(it);
+          });
+          var scroller = h('div', 'hx-scroll'); scroller.appendChild(list);
+          wrap.appendChild(scroller);
+        }
+        var label = all.length > 5 ? 'View all ' + all.length + ' projects' : 'View all projects';
+        wrap.appendChild(actions([{ label: label + ' →', href: 'projects.html', kind: 'primary' }]));
+        return { node: wrap, wide: true };
+      });
+    },
+
+    pricing: function () {
+      var wrap = h('div');
+      wrap.appendChild(para('Simple, transparent pricing:'));
+      var list = h('div', 'hx-list');
+      PLANS.forEach(function (p) {
+        var c = h('div', 'hx-plan' + (p.popular ? ' hx-pop' : ''));
+        var top = h('div', 'hx-plan-top');
+        var t = h('h4', '', p.name);
+        if (p.popular) t.appendChild(h('em', '', 'Popular'));
+        var pr = h('div', 'hx-price', p.price); if (p.per) pr.appendChild(h('small', '', ' ' + p.per));
+        top.appendChild(t); top.appendChild(pr); c.appendChild(top);
+        var ul = h('ul'); p.features.forEach(function (f) { ul.appendChild(h('li', '', f)); });
+        c.appendChild(ul); list.appendChild(c);
+      });
+      wrap.appendChild(list);
+      wrap.appendChild(h('p', 'hx-note', 'Final price depends on the type and complexity of your website.'));
+      wrap.appendChild(actions([
+        { label: 'Get a custom quote', href: waLink('Hi Hridoy, I’d like a quote for my project.'), kind: 'wa' },
+        { label: 'Full pricing', href: 'pricing.html' }
+      ]));
+      return Promise.resolve({ node: wrap, wide: true });
+    },
+
+    cv: function () {
+      var wrap = h('div');
+      wrap.appendChild(para('Sure! Here’s my latest CV:'));
+      var f = h('div', 'hx-file');
+      f.appendChild(h('div', 'hx-file-ico', 'PDF'));
+      var info = h('div'); info.appendChild(h('b', '', 'Muhammad Hridoy — CV')); info.appendChild(h('small', '', 'Curriculum Vitae · PDF'));
+      f.appendChild(info); wrap.appendChild(f);
+      wrap.appendChild(actions([
+        { label: '⬇ Download CV', href: CFG.cv, download: CFG.cvDownloadName, kind: 'primary' },
+        { label: 'Preview', href: CFG.cv, newTab: true }
+      ]));
+      return Promise.resolve({ node: wrap, wide: true });
+    },
+
+    contact: function () {
+      var wrap = h('div');
+      wrap.appendChild(para('Reach me any way you like:'));
+      var rows = h('div', 'hx-rows');
+      [
+        { i: '💬', t: 'WhatsApp', s: '+' + CFG.whatsapp, href: waLink('Hi Hridoy!'), ext: true },
+        { i: '✉️', t: 'Email', s: CFG.email, href: 'mailto:' + CFG.email },
+        { i: '📞', t: 'Phone', s: CFG.phone, href: 'tel:' + CFG.phone }
+      ].forEach(function (r) {
+        var a = h('a', 'hx-crow'); a.href = r.href; if (r.ext) { a.target = '_blank'; a.rel = 'noopener'; }
+        a.appendChild(h('span', '', r.i));
+        var d = h('div'); d.appendChild(document.createTextNode(r.t)); d.appendChild(h('small', '', r.s)); a.appendChild(d);
+        rows.appendChild(a);
+      });
+      wrap.appendChild(rows);
+      wrap.appendChild(actions([
+        { label: 'Open contact page', href: 'contact.html', kind: 'primary' },
+        { label: 'Instagram', href: CFG.instagram, newTab: true },
+        { label: 'Facebook', href: CFG.facebook, newTab: true }
+      ]));
+      return Promise.resolve({ node: wrap, wide: true });
+    },
+
+    hire: function () {
+      var wrap = h('div');
+      wrap.appendChild(para('Great, let’s build something together! 🚀 To get started, send me:'));
+      var ol = h('ol', 'hx-steps');
+      ['What you want built (website, app, dashboard…)', 'Your ideal timeline', 'Your budget range'].forEach(function (s) { ol.appendChild(h('li', '', s)); });
+      wrap.appendChild(ol);
+      wrap.appendChild(h('p', 'hx-note', 'I usually reply within an hour.'));
+      wrap.appendChild(actions([
+        { label: 'Start on WhatsApp', href: waLink('Hi Hridoy, I’d like to hire you for a project.'), kind: 'wa' },
+        { label: 'Send email', href: 'mailto:' + CFG.email + '?subject=' + encodeURIComponent('Project enquiry') },
+        { label: 'Contact form', href: 'contact.html' }
+      ]));
+      return Promise.resolve({ node: wrap, wide: true });
+    },
+
+    ai: function () {
+      var wrap = h('div');
+      wrap.appendChild(para('Yes! I build AI assistants, chatbots and automation for businesses — like the one you’re chatting with right now.'));
+      wrap.appendChild(actions([{ label: 'Discuss an AI project', href: waLink('Hi Hridoy, I’d like to discuss an AI / automation project.'), kind: 'wa' }]));
+      return Promise.resolve({ node: wrap });
+    },
+
+    greet: function () {
+      return Promise.resolve({ node: para('Hello! 👋 What would you like to know? Pick an option below or type your question.') });
+    },
+
+    thanks: function () {
+      return Promise.resolve({ node: para('You’re welcome! 😊 Anything else I can help with?') });
+    },
+
+    fallback: function () {
+      return Promise.resolve({ node: para('I can help with my services, projects, pricing, CV and contact details. Pick one below, or ask me in your own words.') });
+    }
+  };
+
+  /* Understands typed questions (English + a few Banglish words) */
+  function route(q) {
+    q = q.toLowerCase();
+    var has = function () { return Array.prototype.some.call(arguments, function (w) { return q.indexOf(w) > -1; }); };
+    if (has('cv', 'resume', 'résumé', 'curriculum')) return 'cv';
+    if (has('price', 'pricing', 'cost', 'rate', 'budget', 'quote', 'charge', 'fee', 'plan', 'how much', 'dam', 'koto', 'taka')) return 'pricing';
+    if (has('hire', 'freelanc', 'work with you', 'need a website', 'build me', 'order', 'start a project', 'start project')) return 'hire';
+    if (has('contact', 'whatsapp', 'phone', 'call', 'email', 'mail', 'number', 'reach', 'facebook', 'instagram', 'address')) return 'contact';
+    if (has('project', 'portfolio', 'demo', 'sample', 'case stud', 'previous work', 'your work')) return 'projects';
+    if (has('service', 'offer', 'what do you do', 'what can you', 'skill', 'kaj', 'develop')) return 'services';
+    if (/\bai\b/.test(q) || has('chatbot', 'automation')) return 'ai';
+    if (/\b(thanks|thank you|thx|dhonnobad|shukriya)\b/.test(q)) return 'thanks';
+    if (/\b(hi|hello|hey|hlw|salam|assalamu\w*|good (morning|afternoon|evening))\b/.test(q)) return 'greet';
+    return 'fallback';
+  }
+
+  /* ===== 6. Conversation flow ===== */
+  function chipButton(t) {
+    var b = h('button', 'hx-chip', t.label); b.type = 'button';
+    b.addEventListener('click', function () { ask(t.ask, t.key); });
+    return b;
+  }
+  function showQuickStrip() {
+    if (!quick.hidden) return;
+    quick.hidden = false;
+    TOPICS.forEach(function (t) { quick.appendChild(chipButton(t)); });
+  }
+  function ask(text, key) {
+    queue = queue.then(function () { return handle(text, key); });
+  }
+  function handle(text, key) {
+    // first interaction: remove the big welcome chips, use the compact strip instead
+    var welcome = box.querySelector('.hx-chips');
+    if (welcome) welcome.remove();
+    showQuickStrip();
+
+    box.appendChild(userRow(text));
+    var typing = typingRow(); box.appendChild(typing);
+    scrollChat();
+
+    var topic = key || route(text);
+    var t0 = Date.now();
+    return ANSWERS[topic]().then(function (res) {
+      var wait = Math.max(0, 650 - (Date.now() - t0));
+      return new Promise(function (r) { setTimeout(r, wait); }).then(function () { return res; });
+    }).catch(function () {
+      return { node: para('Sorry, something went wrong. Please message me on WhatsApp and I’ll help you personally.') };
+    }).then(function (res) {
+      typing.remove();
+      var row = botRow(res.node, res.wide);
+      box.appendChild(row);
+      scrollChat(row);
+    });
+  }
+
+  function startConversation() {
+    if (started) return; started = true;
+    var typing = typingRow(); box.appendChild(typing);
+    setTimeout(function () {
+      typing.remove();
+      box.appendChild(botRow(para('Hi 👋 I’m Hridoy’s AI assistant. I can show you my services, projects, pricing and more. Tap an option below or type your question.')));
+      var chips = h('div', 'hx-chips');
+      TOPICS.forEach(function (t) { chips.appendChild(chipButton(t)); });
+      box.appendChild(chips);
+      scrollChat();
+    }, 700);
+  }
+
+  /* ===== 7. Open / close ===== */
+  function setOpen(v) {
+    opened = v;
+    win.classList.toggle('hx-open', v);
+    win.setAttribute('aria-hidden', String(!v));
+    btn.classList.toggle('hx-active', v);
+    btn.setAttribute('aria-expanded', String(v));
+    btn.setAttribute('aria-label', v ? 'Close AI assistant' : 'Open AI assistant');
+    if (v) {
+      hideBubble($('hxAiBubble'));
+      startConversation();
+      if (window.innerWidth > 560) setTimeout(function () { input.focus(); }, 300);
+    }
+  }
+  btn.addEventListener('click', function () { setOpen(!opened); });
+  $('hxClose').addEventListener('click', function () { setOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && opened) setOpen(false); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = input.value.trim();
+    if (!v) return;
+    input.value = '';
+    ask(v);
+  });
+
+  /* ===== 8. Welcome text bubble next to the AI button ===== */
+  var timers = {};
+  function showBubble(el, ms) {
+    if (!el || (el.id === 'hxAiBubble' && opened)) return;
+    el.classList.add('hx-show');
+    clearTimeout(timers[el.id]);
+    timers[el.id] = setTimeout(function () { hideBubble(el); }, ms);
+  }
+  function hideBubble(el) { if (el) el.classList.remove('hx-show'); }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-hx-close-bubble]'), function (x) {
+    x.addEventListener('click', function () { hideBubble($(x.getAttribute('data-hx-close-bubble'))); });
+  });
+
+  var small = window.innerWidth <= 560;              // phones: wait until your WhatsApp popup has gone
+  setTimeout(function () { showBubble($('hxAiBubble'), 8000); }, small ? 8800 : 2400); // AI text
+})();
+</script>
+
+<!-- ================================================================
+     AI Assistant widget  (END)
+     ================================================================ -->
 
 <!-- WhatsApp Floating Widget END -->
 </body>
