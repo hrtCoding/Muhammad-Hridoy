@@ -728,81 +728,7 @@ Choose a plan that suits your needs. From personal portfolios to enterprise solu
                         <li><a href="contact.html" class="text-gray-300 hover:text-green-400 transition-colors flex layhetgsjdcb gap-2"><i class="fas fa-envelope text-sm"></i> Contact</a></li>
                     </ul>
                 </div>
-                <!-- AI Chat Button -->
-<div class="ai-chat-wrapper">
 
-    <button id="aiChatBtn" class="ai-chat-btn">
-        🤖
-    </button>
-
-    <div id="aiChatBox" class="ai-chat-box">
-
-        <div class="ai-header">
-            <div>
-                <h4>Hridoy AI Assistant</h4>
-                <span>Online • Ready to help</span>
-            </div>
-            <button id="closeChat">×</button>
-        </div>
-
-
-        <div id="chatMessages" class="chat-messages">
-
-            <div class="ai-message">
-                👋 Hi! I'm Hridoy's AI Assistant.  
-                I can help you with services, projects, pricing and contact.
-            </div>
-
-
-            <div class="quick-box">
-
-                <button onclick="sendMessage('What services do you provide?')">
-                    👨‍💻 Services
-                </button>
-
-                <button onclick="sendMessage('Show me your projects')">
-                    🚀 Projects
-                </button>
-
-                <button onclick="sendMessage('What are your pricing plans?')">
-                    💰 Pricing
-                </button>
-
-                <button onclick="sendMessage('Can I download your CV?')">
-                    📄 CV
-                </button>
-
-                <button onclick="sendMessage('How can I contact you?')">
-                    📞 Contact
-                </button>
-
-                <button onclick="sendMessage('I want to hire you')">
-                    💼 Hire Me
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="chat-input">
-
-            <input 
-            id="userInput"
-            type="text"
-            placeholder="Type your message..."
-            >
-
-            <button onclick="sendUserMessage()">
-                ➤
-            </button>
-
-        </div>
-
-
-    </div>
-
-</div>
                 <div>
                     <h3 class="text-xl font-bold font-code text-white mb-6 flex layhetgsjdcb gap-2">
                         <i class="fas fa-envelope text-green-400"></i> Get in touch
@@ -821,6 +747,57 @@ Choose a plan that suits your needs. From personal portfolios to enterprise solu
             </div>
         </div>
     </footer>
+
+<!-- AI assistant (left side) -->
+<div class="hx" id="hxAi">
+  <div class="hx-bubble" id="hxAiBubble" role="status" aria-live="polite">
+    <div class="hx-bubble-icon" aria-hidden="true"><svg class="" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5V4"/><circle cx="12" cy="2.9" r="1.1" fill="currentColor" stroke="none"/><rect x="4.5" y="6.5" width="15" height="12.5" rx="4"/><path d="M2.2 11.5v3.2M21.8 11.5v3.2"/><circle class="hx-eye" cx="9" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle class="hx-eye" cx="15" cy="12" r="1.5" fill="currentColor" stroke="none"/><path d="M9.4 15.6h5.2"/>
+    </svg></div>
+    <div class="hx-bubble-text">
+      <strong>Hridoy AI Assistant</strong>
+      <span>Ask me about services, pricing &amp; projects</span>
+    </div>
+    <button type="button" class="hx-bubble-x" data-hx-close-bubble="hxAiBubble" aria-label="Dismiss">×</button>
+  </div>
+
+  <section class="hx-window" id="hxWindow" role="dialog" aria-label="Hridoy AI Assistant" aria-hidden="true">
+    <header class="hx-head">
+      <img src="src/img/smale2.jpg" alt="" class="hx-head-avatar" width="42" height="42">
+      <div class="hx-head-info">
+        <b>Hridoy AI Assistant</b>
+        <small><i class="hx-live"></i>Online · Replies instantly</small>
+      </div>
+      <button type="button" class="hx-head-btn" id="hxClose" aria-label="Close chat">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </header>
+
+    <div class="hx-messages" id="hxMessages" aria-live="polite"></div>
+
+    <div class="hx-quick" id="hxQuick" hidden></div>
+
+    <form class="hx-input" id="hxForm" autocomplete="off">
+      <input id="hxInput" type="text" placeholder="Type your message…" maxlength="300" aria-label="Type your message">
+      <button type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3.4 20.4l17.45-7.48a1 1 0 000-1.84L3.4 3.6a.993.993 0 00-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z"/></svg>
+      </button>
+    </form>
+    <div class="hx-foot">Automated assistant · Hridoy replies personally on WhatsApp</div>
+  </section>
+
+  <button type="button" class="hx-ai-btn" id="hxAiBtn" aria-label="Open AI assistant" aria-expanded="false">
+    <svg class="hx-ic-chat" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 6.5V4"/><circle cx="12" cy="2.9" r="1.1" fill="currentColor" stroke="none"/>
+      <rect x="4.5" y="6.5" width="15" height="12.5" rx="4"/>
+      <path d="M2.2 11.5v3.2M21.8 11.5v3.2"/>
+      <circle class="hx-eye" cx="9" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <circle class="hx-eye" cx="15" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <path d="M9.4 15.6h5.2"/>
+    </svg>
+    <svg class="hx-ic-x" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    <i class="hx-dot"></i>
+  </button>
+</div>
 
 <!-- intersect -->
 <script defer src="vendors/@alpinejs/intersect/dist/cdn.min.js"></script>
@@ -1467,221 +1444,10 @@ const chatBox=document.getElementById("aiChatBox");
 const closeChat=document.getElementById("closeChat");
 
 
-chatBtn.onclick=()=>{
 
-chatBox.style.display="block";
 
-}
 
 
-closeChat.onclick=()=>{
-
-chatBox.style.display="none";
-
-}
-
-
-
-const answers={
-
-
-"What services do you provide?":
-
-"👨‍💻 I provide full-stack web development, business websites, e-commerce solutions, custom applications and AI integrations.",
-
-
-"Show me your projects":
-
-"🚀 You can explore my latest projects and development work.",
-
-
-"What are your pricing plans?":
-
-"💰 Pricing depends on project requirements. I provide custom packages based on your needs.",
-
-
-"Can I download your CV?":
-
-"📄 Sure! You can download my latest CV below.",
-
-
-"How can I contact you?":
-
-"📞 You can contact me directly through WhatsApp.",
-
-
-"I want to hire you":
-
-"💼 Great! Let's discuss your project requirements."
-
-};
-
-
-
-function sendMessage(msg){
-
-
-addMessage(msg,"user");
-
-
-let typing=document.createElement("div");
-
-typing.className="typing";
-
-typing.innerHTML="AI is typing...";
-
-chatMessages.appendChild(typing);
-
-
-
-setTimeout(()=>{
-
-
-typing.remove();
-
-
-let reply=answers[msg] || 
-"I can help you with services, projects, pricing and contact.";
-
-
-addMessage(reply,"ai");
-
-
-
-if(msg==="Can I download your CV?"){
-
-addAction("⬇ Download CV","cv");
-
-}
-
-
-if(msg==="What are your pricing plans?"){
-
-addAction("💰 View Pricing","pricing");
-
-}
-
-
-
-if(msg==="How can I contact you?"){
-
-addAction("💬 WhatsApp Me","whatsapp");
-
-}
-
-
-
-if(msg==="Show me your projects"){
-
-addAction("🚀 View Projects","projects");
-
-}
-
-
-
-},1000);
-
-
-
-}
-
-
-
-
-function addMessage(text,type){
-
-
-let div=document.createElement("div");
-
-div.className=type==="user"?
-"user-message":
-"ai-message";
-
-
-div.innerHTML=text;
-
-
-chatMessages.appendChild(div);
-
-
-chatMessages.scrollTop=chatMessages.scrollHeight;
-
-
-}
-
-
-
-function addAction(text,type){
-
-
-let btn=document.createElement("button");
-
-btn.className="quick-box";
-
-btn.innerHTML=text;
-
-
-btn.onclick=()=>{
-
-
-if(type==="cv"){
-
-window.open("assets/cv.pdf");
-
-}
-
-
-if(type==="pricing"){
-
-location.href="pricing.html";
-
-}
-
-
-if(type==="projects"){
-
-location.href="projects.html";
-
-}
-
-
-if(type==="whatsapp"){
-
-window.open(
-"https://wa.me/8801789765804",
-"_blank"
-);
-
-}
-
-
-}
-
-
-chatMessages.appendChild(btn);
-
-
-}
-
-
-
-
-function sendUserMessage(){
-
-let input=document.getElementById("userInput");
-
-
-if(input.value.trim()!==""){
-
-sendMessage(input.value);
-
-input.value="";
-
-}
-
-}
-
-</script>
 
 
 <!-- WhatsApp Floating Widget END -->
